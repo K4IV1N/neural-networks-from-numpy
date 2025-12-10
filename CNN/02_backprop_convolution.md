@@ -258,7 +258,7 @@ $$
 O(i,j) = \sum_{m=1}^{M} \sum_{n=1}^{N} K(m,n) \cdot X_\text{pad}\big(i \cdot s + m - 1, \; j \cdot s + n - 1\big) + b
 $$
 
-$$
+```math
 J_L(\mathbf{O}) =
 \frac{\partial L}{\partial \mathbf{O}} =
 \begin{bmatrix}
@@ -268,9 +268,9 @@ J_L(\mathbf{O}) =
 \frac{\partial L}{\partial O_{11}}
 \end{bmatrix}
 \in \mathbb{R}^{1\times 4}
-$$
+```
 
-$$
+```math
 J_{\mathbf{O}}(\mathbf{X}) =
 \frac{\partial \mathbf{O}}{\partial \mathbf{X}} =
 \begin{bmatrix}
@@ -280,12 +280,12 @@ J_{\mathbf{O}}(\mathbf{X}) =
 \frac{\partial O_{11}}{\partial X_{11}}
 \end{bmatrix}
 \in \mathbb{R}^{4\times 4}
-$$
+```
 
 From:
 $$ \frac{\partial L}{\partial X} = \frac{\partial L}{\partial O} \frac{\partial O}{\partial X}$$
 
-$$
+```math
 \frac{\partial L}{\partial X_{00}} = \frac{\partial L}{\partial O} \frac{\partial O}{\partial X_{00}} =
 \begin{bmatrix}
 \frac{\partial L}{\partial O_{00}} &
@@ -312,7 +312,7 @@ $$
 0 \\
 0
 \end{bmatrix} = \frac{\partial L}{\partial O_{00}}K_{00}
-$$
+```
 
 Therefore:
 
