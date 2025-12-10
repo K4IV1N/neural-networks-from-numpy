@@ -110,25 +110,25 @@ To apply the classical multivariable Jacobian, we need convert the matrix into a
 Flatten by **column-wise** using the `vec` operator:
 
 $$
-\operatorname{vec}(O)=
+\text{vec}(O) =
 \begin{bmatrix}
 O_{00} \\
 O_{10} \\
 O_{01} \\
 O_{11}
 \end{bmatrix}
-\in \mathbb{R}^{4\times 1}
+\in \mathbb{R}^{4 \times 1}
 $$
 
 $$
-\operatorname{vec}(K)=
+\text{vec}(K) =
 \begin{bmatrix}
 K_{00} \\
 K_{10} \\
 K_{01} \\
 K_{11}
 \end{bmatrix}
-\in \mathbb{R}^{4\times 1}
+\in \mathbb{R}^{4 \times 1}
 $$
 
 Because the loss $L$ is a scalar, its Jacobian w.r.t. $\mathbf{O}$ is a row vector
