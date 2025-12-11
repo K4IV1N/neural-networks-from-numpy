@@ -9,7 +9,7 @@ class MaxPool2d(Module):
         self.pool_size = pool_size
 
         if stride is None:
-            stride = pool_size
+            stride = pool_size 
         if isinstance(stride, int):
             stride = (stride, stride)
         self.stride = stride
@@ -38,20 +38,18 @@ class MaxPool2d(Module):
 
         windows = np.lib.stride_tricks.as_strided(
             x, shape=shape, strides=strides, writeable=False
-        )
-
+        ) 
         windows_reshaped = windows.reshape(N, C, OH, OW, KH * KW)
+        
         out = windows_reshaped.max(axis=4)
         self.argmax = windows_reshaped.argmax(axis=4)
-
-        return out
+        return out 
 
     def backward(self, grad_output):
         x = self.x
         N, C, H, W = x.shape
         KH, KW = self.pool_size
         SH, SW = self.stride
-
         OH, OW = grad_output.shape[2:]
 
         dx = np.zeros_like(x)
@@ -63,6 +61,6 @@ class MaxPool2d(Module):
                 kw = idx % KW
                 ih = i * SH + kh
                 iw = j * SW + kw
-                dx[np.arange(N)[:, None], np.arange(C), ih, iw] += grad_output[:, :, i, j]
 
+                dx[np.arange(N)[:, None], np.arange(C), ih, iw] += grad_output[:, :, i, j]
         return dx

@@ -279,7 +279,7 @@ class MaxPool2d(Module):
         OH = (H - KH) // SH + 1
         OW = (W - KW) // SW + 1
 
-        # -------- im2col for pooling ---------
+        # im2col for pooling
         # Create sliding windows using strides trick
         shape = (N, C, OH, OW, KH, KW)
         strides = (

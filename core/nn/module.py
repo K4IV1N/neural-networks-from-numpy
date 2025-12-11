@@ -15,9 +15,7 @@ class Module:
     def __setattr__(self, name, value):
         if isinstance(value, Parameter):
             self.params[name] = value
-        super().__setattr__(name, value)
-
-        if isinstance(value, Module):
+        elif isinstance(value, Module):
             self.layer_dict[name] = value
         super().__setattr__(name, value)
 
@@ -28,7 +26,6 @@ class Module:
                 params.extend(attr.parameters())
         return params
 
-    # Add
     def backward(self, grad_output):
         for layer in reversed(list(self.layer_dict.values())):
             grad_output = layer.backward(grad_output)

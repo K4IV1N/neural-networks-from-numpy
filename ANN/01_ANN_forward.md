@@ -108,11 +108,11 @@ class Linear(Module):
 
     def initialize_params(self, in_features, out_features):
         # simple
-        self.W = Parameter(np.random.randn(in_features, out_features) * 0.01)   # (in_features, out_features, )
+        # self.W = Parameter(np.random.randn(in_features, out_features) * 0.01)   # (in_features, out_features, )
 
-        # Kaiming He normal initialization (best for ReLU networks)
-        # std = np.sqrt(2.0 / in_features)
-        # self.W = Parameter(np.random.randn(in_features, out_features) * std)  # (in_features, out_features, )
+        # Kaiming He normal initialization
+        std = np.sqrt(2.0 / in_features)
+        self.W = Parameter(np.random.randn(in_features, out_features) * std)  # (in_features, out_features, )
 
         self.b = Parameter(np.zeros(out_features)) # (output_features,)
 

@@ -69,7 +69,6 @@ class Module:
     def __setattr__(self, name, value):
         if isinstance(value, Parameter):
             self.params[name] = value
-        super().__setattr__(name, value)
 
         if isinstance(value, Module):
             self.layer_dict[name] = value
@@ -183,9 +182,11 @@ This design allows you to **avoid writing manual backward code**, since each lay
 class Sequential(Module):
     def __init__(self, layers):
         super().__init__()
-        self.layer_dict = {}          # Store the layers
+        self.layer_dict = {}
         for i, layer in enumerate(layers):
-            self.layer_dict['layer' + str(i)] = layer
+            name = "layer" + str(i).zfill(5)
+            self.layer_dict[name] = layer
+
 
     def forward(self, x):
         # Apply each layer in order
@@ -207,6 +208,22 @@ class Sequential(Module):
                 params.extend(layer.parameters())
         return params
 ```
+
+Using
+
+```python
+self.layer_dict['layer' + str(i)] = layer
+```
+
+can cause ordering issues because string sorting places `layer1, layer10, layer2, …` in the wrong order.
+To fix this, we add zero-padding:
+
+```python
+name = "layer" + str(i).zfill(5)
+```
+
+which produces names like `layer00001`
+Zero-padding ensures the layers sort correctly and maintain the intended order.
 
 ```python
 model_seq = Sequential([

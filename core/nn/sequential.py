@@ -3,9 +3,10 @@ from .module import Module
 class Sequential(Module):
     def __init__(self, layers):
         super().__init__()
-        self.layer_dict = {}        
+        self.layer_dict = {}
         for i, layer in enumerate(layers):
-            self.layer_dict['layer' + str(i)] = layer
+            name = "layer" + str(i).zfill(5)  
+            self.layer_dict[name] = layer
 
     def forward(self, x):
         for i in sorted(self.layer_dict.keys()):
