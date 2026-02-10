@@ -236,17 +236,25 @@ X_{20} & X_{21} & X_{22}
 \end{bmatrix}
 ```
 
-Note: In Jacobian terms $ \frac{\partial L}{\partial O} = \begin{bmatrix}
+Note: In Jacobian terms
+
+```math
+\frac{\partial L}{\partial O} = \begin{bmatrix}
 \frac{\partial L}{\partial O⋆{00}} &
 \frac{\partial L}{\partial O⋆{10}} &
 \frac{\partial L}{\partial O⋆{01}} &
 \frac{\partial L}{\partial O⋆{11}}
-\end{bmatrix}$ is a 1×4 row vector. However, for CNN computations, we need to reshape it back into its 2×2 matrix form
+\end{bmatrix}
+```
 
-$\begin{bmatrix}
+is a 1×4 row vector. However, for CNN computations, we need to reshape it back into its 2×2 matrix form
+
+```math
+\begin{bmatrix}
 \frac{\partial L}{\partial O_{00}} & \frac{\partial L}{\partial O_{01}} \\
 \frac{\partial L}{\partial O_{10}} & \frac{\partial L}{\partial O_{11}}
-\end{bmatrix}$
+\end{bmatrix}
+```
 
 ${ \frac{\partial L}{\partial K} = X ⋆ \frac{\partial L}{\partial O} }$
 
@@ -319,30 +327,34 @@ From:
 
 Therefore:
 
-$ \frac{dL}{dX⋆{00}} =
+```math
+\frac{dL}{dX⋆{00}} =
 \frac{dL}{dO}
 \begin{bmatrix}
 {K⋆{00}} \\ 0 \\ 0 \\ 0
 \end{bmatrix} = \frac{\partial L}{\partial O⋆{00}}K⋆{00}
-$
+```
 
-$ \frac{dL}{dX⋆{01}} =
+```math
+\frac{dL}{dX⋆{01}} =
 \frac{dL}{d\mathbf{O}}
 \begin{bmatrix}
 K⋆{01} \\ 0 \\ 0 \\ 0
 \end{bmatrix} = \frac{\partial L}{\partial O⋆{00}}K⋆{01}
-$
+```
 
-$\frac{dL}{dX_{02}} =
+```math
+\frac{dL}{dX_{02}} =
 \frac{dL}{d\mathbf{O}}
 \begin{bmatrix}
-0 \\ K_{01} \\ 0 \\ 0 
+0 \\ K_{01} \\ 0 \\ 0
 \end{bmatrix} = \frac{\partial L}{\partial O_{10}}K_{01}
-$
+```
 
 $\dots$
 
-$\frac{dL}{dX_{22}} =
+```math
+\frac{dL}{dX_{22}} =
 \frac{dL}{d\mathbf{O}}
 \begin{bmatrix}
 0 \\
@@ -350,7 +362,7 @@ $\frac{dL}{dX_{22}} =
 0 \\
 K_{11}
 \end{bmatrix} = \frac{\partial L}{\partial O_{11}}K_{11}
-$
+```
 
 Each derivative $\frac{dL}{dXij}$​ comes from the output derivatives $\frac{dL}{dO_{mn}}$​​ multiplied by the corresponding kernel values. From it relatives, we can put all of them into one formula
 
@@ -372,13 +384,20 @@ K_{01} & K_{00}
 \end{bmatrix}
 ```
 
-$
+```math
 \frac{\partial L}{\partial X} = \text{pad}\left(\frac{\partial L}{\partial O}\right) ⋆ \text{rot180}(K)
-$
+```
 
-Summary: \
-$ \frac{\partial L}{\partial b} = sum( \frac{\partial L}{\partial O}) $
+Summary:
 
-$ { \frac{\partial L}{\partial K} = X ⋆ \frac{\partial L}{\partial O} } $
+```math
+\frac{\partial L}{\partial b} = sum( \frac{\partial L}{\partial O})
+```
 
-$ \frac{\partial L}{\partial X} = \text{pad}\left(\frac{\partial L}{\partial O}\right) ⋆ \text{rot180}(K) $
+```math
+{ \frac{\partial L}{\partial K} = X ⋆ \frac{\partial L}{\partial O} }
+```
+
+```math
+\frac{\partial L}{\partial X} = \text{pad}\left(\frac{\partial L}{\partial O}\right) ⋆ \text{rot180}(K)
+```

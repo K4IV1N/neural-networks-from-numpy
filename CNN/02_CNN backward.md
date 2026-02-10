@@ -8,11 +8,17 @@ Now that we have implemented the **forward pass** of the CNN, let's move to **ba
 
 If you want to know more information how this formula from. i recommned you read this [CNN Backpropagation ](./02_backprop_convolution.md)
 
-$ \frac{\partial L}{\partial b} = sum( \frac{\partial L}{\partial O}) $
+```math
+\frac{\partial L}{\partial b} = sum( \frac{\partial L}{\partial O})
+```
 
-$ { \frac{\partial L}{\partial K} = X ⋆ \frac{\partial L}{\partial O} } $
+```math
+{ \frac{\partial L}{\partial K} = X ⋆ \frac{\partial L}{\partial O} }
+```
 
-$ \frac{\partial L}{\partial X} = \text{pad}\left(\frac{\partial L}{\partial O}\right) ⋆ \text{rot180}(K) $
+```math
+\frac{\partial L}{\partial X} = \text{pad}\left(\frac{\partial L}{\partial O}\right) ⋆ \text{rot180}(K)
+```
 
 ```python
 class Conv2d(Module):
