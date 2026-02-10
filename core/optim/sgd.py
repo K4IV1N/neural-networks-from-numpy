@@ -1,6 +1,5 @@
 from core.nn.module import Module
 
-
 class SGD:
     def __init__(self, _module, lr=0.01):
         if isinstance(_module, Module): 

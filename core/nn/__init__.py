@@ -5,7 +5,7 @@ from .relu import ReLU
 from .module import Module
 from .parameter import Parameter
 from .sequential import Sequential
-
+from .softmax import Softmax
 __all__ = [
     "Linear",
     "Module",
@@ -15,4 +15,5 @@ __all__ = [
     "Flatten",
     "MaxPool2d",
     "Sequential",
+    "Softmax",
 ]

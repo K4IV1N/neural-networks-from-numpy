@@ -2,7 +2,9 @@
 
 For the linear layer: ${Z = X W + b}$
 
-$${Z_{N,D_{out}} = X_{N,D_{in}} (W_{D_{in},D_{out}})^T + b_{out}}$$
+```math
+{Z_{N,D_{out}} = X_{N,D_{in}} (W_{D_{in},D_{out}})^T + b_{out}}
+```
 
 - ${N}$: batch size
 - ${D_{\text{in}}}$: input feature dimension
@@ -19,7 +21,10 @@ During backpropagation, we compute gradients with respect to three variables `W,
 ---
 
 The linear layer is:
-$$ Z = X W + b $$
+
+```math
+Z = X W + b
+```
 
 From matrix multiplication:
 
@@ -37,9 +42,9 @@ Only `one term` in this sum contains ${W_{i,j}}$ that is ${X_{n,i} W_{i,j}}$
 
 Example for a specific sample ${n = 0}$ and output index ${j = 3}$:
 
-$$
+```math
 Z_{0,3} = X_{0,1} W_{1,3} + X_{0,2} W_{2,3} + \dots + X_{0,i} W_{i,3} + \dots + b_3
-$$
+```
 
 Only the term ${X_{0,i} W_{i,3}}$ depends on ${W_{i,3}}$ → $\frac{\partial Y_{0,3}}{\partial W_{i,3}}= X_{0,i}$
 
@@ -98,32 +103,38 @@ In **matrix form**, this can be written as:
 
 propagate the gradient backward to the previous layer:
 
-$$
+````math
 \frac{\partial L}{\partial X_{n,i}}
 = \sum_{j}
 \frac{\partial L}{\partial Z_{n,j}}
 \frac{\partial Z_{n,j}}{\partial X_{n,i}}
-$$
+```math
 
 from
 
 ```math
 Z_{n,j} = X_{n,1} W_{1,j} + X_{n,2} W_{2,j} + \dots + X_{n,i} W_{i,j} + \dots + b_j
-```
+````
 
 Only `one term` in this sum contains $X_{n,i}$ that is ${X_{n,i} W_{i,j}}$
 
 Therefore:
-$$\frac{\partial Z_{n,j}}{\partial X_{n,i}} = W_{i,j}$$
 
-$$
+```math
+\frac{\partial Z_{n,j}}{\partial X_{n,i}} = W_{i,j}
+```
+
+```math
 \frac{\partial L}{\partial X_{n,i}}
 = \sum_{j} \frac{\partial L}{\partial Z_{n,j}}(W_{i,j})
-$$
+```
 
 Since $\frac{\partial L}{\partial Z_{n,j}}$ has shape $(n, j)$, we take `transpose` to $W_{i,j}$ for proper matrix multiplication.  
 In matrix form, this can be written as:
-$$ \frac{\partial L}{\partial X} = dZ \, W^T $$
+
+```math
+\frac{\partial L}{\partial X} = dZ \, W^T
+```
 
 ### Summary
 

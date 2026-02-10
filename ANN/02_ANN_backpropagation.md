@@ -17,17 +17,20 @@ Backpropagation in this task uses the **chain rule** to track gradients through 
 From the network diagram, we can see that we need to propagate the gradient **backward from the loss to each layer**.
 
 For the **Mean Squared Error (MSE)** loss:
-$$ L = \frac{1}{n} \sum (Y*{\text{pred}} - Y*{\text{true}})^2 $$
 
-$$
+```math
+L = \frac{1}{n} \sum (Y_{\text{pred}} - Y_{\text{true}})^2
+```
+
+```math
 Y_{pred} = \begin{bmatrix} y^{pred}_1 \\ y^{pred}_2 \\ \vdots \\ y^{pred}_n \end{bmatrix},
 Y_{true} = \begin{bmatrix} y^{true}_1 \\ y^{true}_2 \\ \vdots \\ y^{true}_n
  \end{bmatrix}
-$$
+```
 
 Therefore:
 
-$$
+```math
 L = \frac{1}{n}
 \left[
 (y_1^{pred} - y_1^{true})^2 +
@@ -35,16 +38,16 @@ L = \frac{1}{n}
 \cdots +
 (y_n^{pred} - y_n^{true})^2
 \right]
-$$
+```
 
-$$
+```math
 \frac{\partial L}{\partial y_j^{pred}}
 = \frac{1}{n} \, 2 (y_j^{pred} - y_j^{true})
-$$
+```
 
 Because the loss $L$ is a scalar, its Jacobian w.r.t. $\mathbf{O}$ is a row vector
 
-$$
+```math
 \frac{\partial L}{\partial Y^{pred}}
 =
 \begin{bmatrix}
@@ -53,9 +56,9 @@ $$
 \cdots,
 \frac{\partial L}{\partial y_n^{pred}}
 \end{bmatrix}
-$$
+```
 
-$$
+```math
 \frac{\partial L}{\partial Y^{pred}}
 =
 \frac{2}{n}
@@ -65,12 +68,12 @@ y_2^{pred} - y_2^{true},
 \cdots,
 y_n^{pred} - y_n^{true}
 \end{bmatrix}
-$$
+```
 
 Since $Y_{pred}$ and $Y_{true}$ are column vectors,
 it is convenient to represent the gradient $\frac{\partial L}{\partial Y^{pred}}$ as a column vector as well, so that its shape matches $\frac{\partial L}{\partial Y^{pred}}$ and can be used directly in subsequent vectorized computations
 
-$$
+```math
 \frac{\partial L}{\partial Y^{pred}}
 =
 \frac{2}{n}
@@ -80,12 +83,12 @@ y_2^{pred} - y_2^{true}\\
 \vdots\\
 y_n^{pred} - y_n^{true}
 \end{bmatrix}
-$$
+```
 
-$$
+```math
 \frac{\partial L}{\partial Y^{pred}}
 = \frac{2}{n}(Y^{pred} - Y^{true})
-$$
+```
 
 This derivative is the `starting point` of backpropagation. It will be sent backward through each layer using the **chain rule**, allowing us to compute gradients for all weights and biases in the network.
 
@@ -112,39 +115,43 @@ class MSE:
 
 For the **Cross-Entropy Loss** loss:
 
-$$
+```math
 L = -\frac{1}{n} \sum_{i=1}^{n} \sum_{c=1}^{C}
 y^{true}_{ic} \log(y^{pred}_{ic})
-$$
+```
 
 Therefore:
 
-$$
+```math
 L = -\frac{1}{n} \Bigg[
 \sum_{c=1}^{C} y_{1c}^{\text{true}} \log(y_{1c}^{\text{pred}}) +
 \sum_{c=1}^{C} y_{2c}^{\text{true}} \log(y_{2c}^{\text{pred}}) +
 \cdots +
 \sum_{c=1}^{C} y_{nc}^{\text{true}} \log(y_{nc}^{\text{pred}})
 \Bigg]
-$$
+```
 
-$$
+```math
 \frac{\partial L}{\partial y_{jc}^{\text{pred}}}
 = - \frac{\partial}{\partial y_{jc}^{\text{pred}}} \sum_{c=1}^{C} y_{jc}^{\text{true}} \log(y_{jc}^{\text{pred}})
-$$
+```
 
 We know that:
-$$ \frac{d}{dx} \log(x) = \frac{1}{x} $$
+
+```math
+\frac{d}{dx} \log(x) = \frac{1}{x}
+```
+
 Applying this to the term
 
-$$
+```math
 -\frac{\partial}{\partial y_{jc}^{\text{pred}}} \big( y_{jc}^{\text{true}} \log(y_{jc}^{\text{pred}}) \big)
 = - \frac{y_{jc}^{\text{true}}}{y_{jc}^{\text{pred}}}
-$$
+```
 
 For sample $ j $, the gradient with respect to the predicted vector $ \mathbf{y_j}^{\text{pred}} $ is:
 
-$$
+```math
 \frac{\partial L}{\partial \mathbf{y}_j^{\text{pred}}} =
 -\frac{1}{n}
 \begin{bmatrix}
@@ -153,11 +160,11 @@ $$
 \vdots \\
 \frac{y_{jC}^{\text{true}}}{y_{jC}^{\text{pred}}}
 \end{bmatrix}
-$$
+```
 
-$$
+```math
 \frac{\partial L}{\partial \mathbf{Y}^{\text{pred}}} = -\frac{1}{n} \frac{\mathbf{Y}^{\text{true}}}{\mathbf{Y}^{\text{pred}}}
-$$
+```
 
 ```python
 class CrossEntropy:
@@ -260,15 +267,20 @@ class Linear(Module):
 ## ReLU Backpropagation
 
 The **ReLU** activation function is defined as:
-$$ f(x) = \max(0, x) $$
+
+```math
+f(x) = \max(0, x)
+```
 
 For the **backward pass**, we need the gradient with respect to the input $x$:
 
-$$ \frac{\partial L}{\partial x} = \frac{\partial L}{\partial y} \cdot \frac{\partial y}{\partial x} $$
+```math
+\frac{\partial L}{\partial x} = \frac{\partial L}{\partial y} \cdot \frac{\partial y}{\partial x}
+```
 
 Where:
 
-$$
+```math
 f(x) =
 \begin{cases}
 x & \text{if } x > 0 \\
@@ -280,14 +292,16 @@ x & \text{if } x > 0 \\
 1 & \text{if } x > 0 \\
 0 & \text{if } x \leq 0
 \end{cases}
-$$
+```
 
 where $`\frac{\partial y}{\partial x}`$ represents the gradient of ReLU with respect to its input.
 
 $`\frac{\partial L}{\partial y}`$ is the gradient coming from the **previous layer**.
 So the gradient with respect to the input (x) is:
 
-$$ \text{grad}_{\text{output}} = \text{grad}_{\text{input}} \cdot \text{mask} $$
+```math
+\text{grad}_{\text{output}} = \text{grad}_{\text{input}} \cdot \text{mask}
+```
 
 `mask = x > 0` is stored during the forward pass.
 
@@ -316,7 +330,9 @@ From the images, you can see:
 
 ### SGD (Stochastic Gradient Descent)
 
-$${W_{new}​=W_{old}​−η⋅∇_W​Loss}$$
+```math
+{W_{new}​=W_{old}​−η⋅∇_W​Loss}
+```
 
 - ${W_{old}}$ is the current weight of that layer (stored in the `Parameter.data` attribute)
 - $∇_W​Loss$ (Gradient) represents how much the loss changes with respect to the $W$. (stored in the `Parameter.grad` attribute)

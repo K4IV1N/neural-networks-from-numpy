@@ -97,9 +97,9 @@ class Conv2d(Module):
 For each output location $(i,j)$, max pooling selects the maximum value from
 its corresponding window $W_{i,j}$
 
-$$
+```math
 Y_{i,j} = \max_{(m,n) \in W_{i,j}} X_{m,n}
-$$
+```
 
 Each window $W_{i,j}$ is defined by the pooling size and stride.
 
@@ -107,40 +107,40 @@ Each window $W_{i,j}$ is defined by the pooling size and stride.
 
 For each element $X_{m,n}$ inside the pooling window $W_{i,j}$
 
-$$
+```math
 \frac{\partial Y_{i,j}}{\partial X_{m,n}} =
 \begin{cases}
 1, & X_{m,n} = \max\limits_{(u,v)\in W_{i,j}} X_{u,v} \\
 0, & \text{otherwise}
 \end{cases}
-$$
+```
 
 This is implemented as a **mask** indicating the max location:
 
-$$
+```math
 \text{mask}_{m,n}^{(i,j)} = \mathbf{1}\left(X_{m,n} =
 \max_{(u,v)\in W_{i,j}} X_{u,v}\right)
-$$
+```
 
 From
 
-$$
+```math
 \frac{\partial L}{\partial X_{m,n}}
 =
 \frac{\partial L}{\partial Y_{i,j}}
 \cdot
 \frac{\partial Y_{i,j}}{\partial X_{m,n}}
-$$
+```
 
 Substituting the mask:
 
-$$
+```math
 \frac{\partial L}{\partial X_{m,n}}
 =
 \frac{\partial L}{\partial Y_{i,j}}
 \cdot
 \text{mask}_{m,n}^{(i,j)}
-$$
+```
 
 ```python
 class MaxPool2d(Module):

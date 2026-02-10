@@ -1,4 +1,4 @@
-From 02_CNN backward.md, you can see that the model performance is not good because the training set is very small. However, training still takes a long time. Why?
+From `02_CNN backward.md`, you can see that the model performance is not good because the training set is very small. However, training still takes a long time. Why?
 
 ```python
 for n in range(N):

@@ -17,10 +17,10 @@ This document explains the forward pass of a 2D convolution operation, including
 
 The output dimensions are given by:
 
-$$
+```math
 H_\text{out} = \left\lfloor \frac{H + 2PH - M}{SH} \right\rfloor + 1, \quad
 W_\text{out} = \left\lfloor \frac{W + 2PW - N}{SW} \right\rfloor + 1
-$$
+```
 
 ---
 
@@ -28,9 +28,9 @@ $$
 
 The output at position $(i, j)$ is calculated as:
 
-$$
+```math
 O(i,j) = \sum_{m=1}^{M} \sum_{n=1}^{N} K(m,n) \cdot X_\text{pad}\big(i \cdot SH + m - 1, \; j \cdot SW + n - 1\big) + b
-$$
+```
 
 During backpropagation, we compute gradients with respect to three variables (K, b, X):
 
@@ -44,39 +44,39 @@ X: the input; we return $dL/dX$ as the output to propagate the error to the next
 
 The conv layer is
 
-$$
+```math
 O(i,j) = \sum_{m=1}^{M} \sum_{n=1}^{N} K(m,n) \cdot X_\text{pad}\big(i \cdot s + m - 1, \; j \cdot s + n - 1\big) + b
-$$
+```
 
-$$
+```math
 \frac{\partial O(i,j)}{\partial b} = \frac{\partial}{\partial b} \Big( \sum_{m=1}^{M} \sum_{n=1}^{N} K(m,n) \cdot X_\text{pad}\big(i \cdot s + m - 1, \; j \cdot s + n - 1\big) + b) = \frac{\partial}{\partial b} \Big(  b \Big) = 1
-$$
+```
 
 Therefore:
 
-$$
+```math
 \frac{\partial L}{\partial b} = \sum_{i,j}^{N} \frac{\partial L}{\partial O(i,j)}\frac{\partial O(i,j)}{\partial b}  =\sum_{i,j}^{N} \frac{\partial L}{\partial O(i,j)}(1)  =\sum_{i,j}^{N} \frac{\partial L}{\partial O(i,j)}
-$$
+```
 
-$$
+```math
 \frac{\partial L}{\partial b} = sum( \frac{\partial L}{\partial O})
-$$
+```
 
 ### Gradient with respect to `K`
 
 ---
 
-$$
+```math
 {
 \frac{\partial L}{\partial K} = \frac{\partial L}{\partial O}\frac{\partial O}{\partial K}
 }
-$$
+```
 
 ## **classical multivariable chain rule** and the **Jacobian matrix**
 
 Assume the convolution layer produces a **2×2** output:
 
-$$
+```math
 X = \begin{bmatrix}
 X_{00} & X_{01} & X_{02} \\
 X_{10} & X_{11} & X_{12} \\
@@ -88,28 +88,28 @@ K=
 K_{00} & K_{01} \\
 K_{10} & K_{11}
 \end{bmatrix}
-$$
+```
 
-$$
+```math
 O = \begin{bmatrix}
 O_{00} & O_{01} \\
 O_{10} & O_{11}
 \end{bmatrix}
-$$
+```
 
-$$
+```math
 \begin{aligned}
 O_{00} &= K_{00} X_{00} + K_{01} X_{01} + K_{10} X_{10} + K_{11} X_{11} \\
 O_{01} &= K_{00} X_{01} + K_{01} X_{02} + K_{10} X_{11} + K_{11} X_{12} \\
 O_{10} &= K_{00} X_{10} + K_{01} X_{11} + K_{10} X_{20} + K_{11} X_{21} \\
 O_{11} &= K_{00} X_{11} + K_{01} X_{12} + K_{10} X_{21} + K_{11} X_{22}
 \end{aligned}
-$$
+```
 
 To apply the classical multivariable Jacobian, we need convert the matrix into a vector.
 Flatten by **column-wise** using the `vec` operator:
 
-$$
+```math
 \text{vec}(O) =
 \begin{bmatrix}
 O_{00} \\
@@ -118,9 +118,9 @@ O_{01} \\
 O_{11}
 \end{bmatrix}
 \in \mathbb{R}^{4 \times 1}
-$$
+```
 
-$$
+```math
 \text{vec}(K) =
 \begin{bmatrix}
 K_{00} \\
@@ -129,11 +129,11 @@ K_{01} \\
 K_{11}
 \end{bmatrix}
 \in \mathbb{R}^{4 \times 1}
-$$
+```
 
 Because the loss $L$ is a scalar, its Jacobian w.r.t. $\mathbf{O}$ is a row vector
 
-$$
+```math
 J_L(\mathbf{O}) =
 \frac{\partial L}{\partial \mathbf{O}} =
 \begin{bmatrix}
@@ -143,9 +143,9 @@ J_L(\mathbf{O}) =
 \frac{\partial L}{\partial O_{11}}
 \end{bmatrix}
 \in \mathbb{R}^{1\times 4}
-$$
+```
 
-$$
+```math
 J_{\mathbf{O}}(\mathbf{K}) =
 \frac{\partial \mathbf{O}}{\partial \mathbf{K}} =
 \begin{bmatrix}
@@ -167,9 +167,9 @@ J_{\mathbf{O}}(\mathbf{K}) =
 \frac{\partial O_{11}}{\partial K_{11}}
 \end{bmatrix}
 \in \mathbb{R}^{4\times 4}
-$$
+```
 
-$$
+```math
 J_L(\mathbf{K}) =
 \frac{\partial L}{\partial \mathbf{K}} =
 \begin{bmatrix}
@@ -179,9 +179,9 @@ J_L(\mathbf{K}) =
 \frac{\partial L}{\partial K_{11}}
 \end{bmatrix}
 \in \mathbb{R}^{1\times 4}
-$$
+```
 
-$$
+```math
 \frac{\partial O}{\partial K} =
 \begin{bmatrix}
 X_{00} & X_{10} & X_{01} & X_{11} \\
@@ -189,14 +189,14 @@ X_{10} & X_{20} & X_{11} & X_{21} \\
 X_{01} & X_{11} & X_{02} & X_{12} \\
 X_{11} & X_{21} & X_{12} & X_{22}
 \end{bmatrix}
-$$
+```
 
-$$
+```math
 \frac{\partial L}{\partial K}=
 \frac{\partial L}{\partial O}\frac{\partial L}{\partial K}
-$$
+```
 
-$$
+```math
 \begin{bmatrix}
 \frac{\partial L}{\partial K_{00}} &
 \frac{\partial L}{\partial K_{10}} &
@@ -216,13 +216,13 @@ X_{10} & X_{20} & X_{11} & X_{21} \\
 X_{01} & X_{11} & X_{02} & X_{12} \\
 X_{11} & X_{21} & X_{12} & X_{22}
 \end{bmatrix}
-$$
+```
 
 <img src="utils/kernel_position.png" width="450" style="display:block; margin:auto;"/>
 
 The pattern **shifts across the input** depending on the `kernel position`
 
-$$
+```math
 \frac{\partial L}{\partial K} =   \begin{bmatrix}
 X_{00} & X_{01} & X_{02} \\
 X_{10} & X_{11} & X_{12} \\
@@ -234,7 +234,7 @@ X_{20} & X_{21} & X_{22}
 \frac{\partial L}{\partial O_{01}} &
 \frac{\partial L}{\partial O_{11}}
 \end{bmatrix}
-$$
+```
 
 Note: In Jacobian terms $ \frac{\partial L}{\partial O} = \begin{bmatrix}
 \frac{\partial L}{\partial O⋆{00}} &
@@ -254,9 +254,9 @@ ${ \frac{\partial L}{\partial K} = X ⋆ \frac{\partial L}{\partial O} }$
 
 ---
 
-$$
+```math
 O(i,j) = \sum_{m=1}^{M} \sum_{n=1}^{N} K(m,n) \cdot X_\text{pad}\big(i \cdot s + m - 1, \; j \cdot s + n - 1\big) + b
-$$
+```
 
 ```math
 J_L(\mathbf{O}) =
@@ -283,7 +283,10 @@ J_{\mathbf{O}}(\mathbf{X}) =
 ```
 
 From:
-$$ \frac{\partial L}{\partial X} = \frac{\partial L}{\partial O} \frac{\partial O}{\partial X}$$
+
+```math
+\frac{\partial L}{\partial X} = \frac{\partial L}{\partial O} \frac{\partial O}{\partial X}
+```
 
 ```math
 \frac{\partial L}{\partial X_{00}} = \frac{\partial L}{\partial O} \frac{\partial O}{\partial X_{00}} =
@@ -351,7 +354,7 @@ $
 
 Each derivative $\frac{dL}{dXij}$​ comes from the output derivatives $\frac{dL}{dO_{mn}}$​​ multiplied by the corresponding kernel values. From it relatives, we can put all of them into one formula
 
-$$
+```math
 \begin{bmatrix}
 \frac{dL}{dX_{00}} & \frac{dL}{dX_{01}} & \frac{dL}{dX_{02}} \\
 \frac{dL}{dX_{10}} & \frac{dL}{dX_{11}} & \frac{dL}{dX_{12}} \\
@@ -367,7 +370,7 @@ $$
 K_{11} & K_{10} \\
 K_{01} & K_{00}
 \end{bmatrix}
-$$
+```
 
 $
 \frac{\partial L}{\partial X} = \text{pad}\left(\frac{\partial L}{\partial O}\right) ⋆ \text{rot180}(K)
